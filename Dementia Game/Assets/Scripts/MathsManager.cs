@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MathsManager : MonoBehaviour
 {
     
-    private int[] index,awnser,result,multiplier,pickNumber,dropdownValues;
-    private int operaterValue,increment,randomNumberPick,rangeReducer;
+    private int[] index,awnser,result,multiplier,pickNumber,dropdownValues,operaterDropdownValue;
+    private int operaterValue,increment,score,randomNumberPick,rangeReducer;
     private GameObject[] tempNumbers,tempSigns;
     private float time=0.0f;
 
@@ -19,7 +20,8 @@ public class MathsManager : MonoBehaviour
     public float TimeLimit = 3.0f;
     public float SignTime = 3.0f;
 
-    public Dropdown[] dropdowns;
+    public Dropdown[] dropdowns, operaterDropdown;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +34,7 @@ public class MathsManager : MonoBehaviour
         tempSigns = new GameObject[4];
         pickNumber = new int[V];
         dropdownValues = new int[4];
+        operaterDropdownValue = new int[4];
 
         increment =0;
         for (int i = 0; i < index.Length; i++)
@@ -55,6 +58,7 @@ public class MathsManager : MonoBehaviour
                 multiplier[l] = operaterValue - 2;
             }
             dropdownValues[l] = dropdowns[l].value;
+            operaterDropdownValue[l] = (operaterDropdown[l].value)-1;
         }
         for (int k = 0; k < awnser.Length; k++)
         {
@@ -184,8 +188,8 @@ public class MathsManager : MonoBehaviour
     {
         for (int i = 0; i < dropdowns.Length; i++)
         {
-
-            dropdownValues[i] = multiplier[i]*dropdowns[i].value;
+            operaterDropdownValue[i] = (operaterDropdown[i].value) - 1;
+            dropdownValues[i] = operaterDropdownValue[i]*dropdowns[i].value;
 
             
             //if (awnser[i] == dropdownValues[i])
