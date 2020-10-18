@@ -8,7 +8,7 @@ public class MathsManager : MonoBehaviour
 {
     
     private int[] index,awnser,result,multiplier,pickNumber,dropdownValues,operaterDropdownValue;
-    private int operaterValue,increment,score,randomNumberPick,rangeReducer;
+    private int operaterValue, increment, score, scoreMultiplier, randomNumberPick,rangeReducer;
     private GameObject[] tempNumbers,tempSigns;
     private float time=0.0f;
 
@@ -21,11 +21,12 @@ public class MathsManager : MonoBehaviour
     public float SignTime = 3.0f;
 
     public Dropdown[] dropdowns, operaterDropdown;
-    
+    public TMP_Text Points;
     // Start is called before the first frame update
     void Start()
     {
-        
+        score = 0;
+        scoreMultiplier = 0;
         index = new int[9999];
         awnser= new int[4];
         result = new int[4];
@@ -159,7 +160,8 @@ public class MathsManager : MonoBehaviour
     {
         
         time += Time.deltaTime;
-        
+        Points.text = "Points: " + score;
+        score += 1 * scoreMultiplier;
         if(time>=TimeLimit)
         {
             ShuffleNumbers();
@@ -171,10 +173,15 @@ public class MathsManager : MonoBehaviour
             if (awnser[i] == dropdownValues[i])
             {
             Debug.Log("Yes");
+                scoreMultiplier += 1;
         }
             else
         {
             Debug.Log("No");
+                if(scoreMultiplier>0)
+                {
+                    scoreMultiplier -= 1;
+                }
         }
         }
     }

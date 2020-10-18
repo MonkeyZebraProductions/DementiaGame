@@ -4820,6 +4820,7 @@ MonoBehaviour:
   - {fileID: 298904576}
   - {fileID: 1716557901}
   - {fileID: 578795153}
+  Points: {fileID: 982212572}
 --- !u!1001 &720086331
 PrefabInstance:
   m_ObjectHideFlags: 0
