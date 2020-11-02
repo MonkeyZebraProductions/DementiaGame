@@ -22,27 +22,27 @@ public class Cursor : MonoBehaviour
         transform.position = worldPosition;
     }
 
-    void OnTriggerEnter2D(Collider2D collider2D)
-    {
-        if (collider2D.gameObject.tag == "MainCamera")
-        {
-            CanMove.Invoke();
-        }
-    }
+//    void OnTriggerEnter2D(Collider2D collider2D)
+//    {
+//        if (collider2D.gameObject.tag == "MainCamera")
+//        {
+//            CanMove.Invoke();
+//        }
+//    }
 
-    void OnTriggerStay2D(Collider2D collider2D)
-    {
-        if (collider2D.gameObject.tag == "MainCamera")
-        {
-            CanMove.Invoke();
-        }
-    }
+//    void OnTriggerStay2D(Collider2D collider2D)
+//    {
+//        if (collider2D.gameObject.tag == "MainCamera")
+//        {
+//            CanMove.Invoke();
+//        }
+//    }
 
-    void OnTriggerExit2D(Collider2D collider2D)
-    {
-        if (collider2D.gameObject.tag == "MainCamera")
-        {
-            CantMove.Invoke();
-        }
-    }
+//    void OnTriggerExit2D(Collider2D collider2D)
+//    {
+//        if (collider2D.gameObject.tag == "MainCamera")
+//        {
+//            CantMove.Invoke();
+//        }
+//    }
 }

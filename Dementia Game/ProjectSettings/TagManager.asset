@@ -8,6 +8,18 @@ TagManager:
   - Draggables
   - Cursor
   - NullPoints
+  - Wall
+  - Face1
+  - Face2
+  - Face3
+  - Face4
+  - FirstFace
+  - SecondFace
+  - ThirdFace
+  - FourthFace
+  - thought
+  - head
+  - Music
   layers:
   - Default
   - TransparentFX

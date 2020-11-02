@@ -17,6 +17,7 @@ class DragTransform : MonoBehaviour
         position = gameObject.transform.position;
     }
 
+    /*
 
     void OnMouseEnter()
     {
@@ -27,6 +28,8 @@ class DragTransform : MonoBehaviour
     {
         GetComponent<Renderer>().material.color = originalColor;
     }
+
+    */
 
     void OnMouseDown()
     {
@@ -41,6 +44,7 @@ class DragTransform : MonoBehaviour
 
     void Update()
     {
+
 
         float step = speed * Time.deltaTime;
 

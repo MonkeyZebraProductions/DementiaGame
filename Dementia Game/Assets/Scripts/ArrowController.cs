@@ -6,17 +6,21 @@ using TMPro;
 
 public class ArrowController : MonoBehaviour
 {
-    public float BeatTempo,Arrows;
-    
+    public float BeatTempo;
+    private float songTime=50.0f;
+    public UnityEvent PerfectCombo, GoodCombo,OKCombo, NullCombo;
 
     private bool canBePressed;
 
     public KeyCode keyToPress;
-    public UnityEvent LoadScene;
     private static float combo,counter,holdTimer;
     private float multiplier;
-
-    public TMP_Text ComboText;
+    private float smooth;
+    public float RotateRate;
+    public float RotateValue;
+    public AudioSource Moosic;
+    ///public TMP_Text ComboText,Result;
+    //public GameObject ResultScreen,DancingPlayer;
     //private BoxCollider2D boxCollider2D;
     //private SpriteRenderer spriteRenderer;
 
@@ -28,14 +32,17 @@ public class ArrowController : MonoBehaviour
         multiplier = 1.0f;
         BeatTempo /= 60;
         canBePressed = false;
-        combo = 0.0f;
+        //transform.position+= new Vector3(0, BeatTempo * Time.deltaTime*songTime, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
+       
         transform.position -= new Vector3(0, BeatTempo * Time.deltaTime, 0);
-        ComboText.text = "Combo: " + combo;
+        Quaternion target = Quaternion.Euler(0, 0, RotateValue);
+        transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth*smooth*smooth);
+        smooth += RotateRate;
         if (transform.position.y>=-5.25 && transform.position.y <= -4.25)
         {
             multiplier = 2.0f;
@@ -52,14 +59,33 @@ public class ArrowController : MonoBehaviour
         if (Input.GetKeyDown(keyToPress) && canBePressed==true)
         {
             //ComboUp.Invoke();
+            Moosic.Play();
+            switch (multiplier)
+            {
+                case 2.0f:
+                    
+                        PerfectCombo.Invoke();
+                        
+                        break;
+                    
+                case 1.5f:
+                    
+                        GoodCombo.Invoke();
+                        break;
+                    
+                case 1.0f:
+                    
+                        OKCombo.Invoke();
+                        break;
+                    
+                default:
+                    
+                        Debug.Log("Yandere Dev hella gay");
+                        break;
+            }
             gameObject.SetActive(false);
-            combo += multiplier;
-            
         }
-        if(counter==Arrows-1)
-        {
-            LoadScene.Invoke();
-        }
+       
         Debug.Log(counter);
     }
 
@@ -68,15 +94,16 @@ public class ArrowController : MonoBehaviour
         if (collider2D.gameObject.tag == "Arrow")
         {
             canBePressed = true;
-            Debug.Log("yee");
-            counter += 1;
+            
+            
+            
         }
         if (collider2D.gameObject.tag == "NullPoints")
         {
             canBePressed = false;
-            combo = 0.0f;
             
-            //ComboNull.Invoke();
+            
+            NullCombo.Invoke();
 
         }
         

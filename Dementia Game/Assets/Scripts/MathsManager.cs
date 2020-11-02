@@ -8,20 +8,21 @@ public class MathsManager : MonoBehaviour
 {
     
     private int[] index,awnser,result,multiplier,pickNumber,dropdownValues,operaterDropdownValue;
-    private int operaterValue, increment, score, scoreMultiplier, randomNumberPick,rangeReducer;
-    private GameObject[] tempNumbers,tempSigns;
+    private int operaterValue, increment, scoreMultiplier, randomNumberPick,rangeReducer;
+    private GameObject[] tempNumbers, tempSigns;
+    public GameObject[] NumberArray, DragabeNumbers, PositiveNegative,Transitions;
     private float time=0.0f;
-
+    private float score;
     const int V = 10;
-    public GameObject[] NumberArray, DragabeNumbers,PositiveNegative;
+    public GameObject ResultScreen,OK,Good,Great;
     //public GameObject[] DragabeNumbers;
     public Transform[] NumberSpawner, OperaterSpawner;
     public BoxCollider2D[] AwnserBoxes,DraggableNumbers;
     public float TimeLimit = 3.0f;
-    public float SignTime = 3.0f;
-
+    public float TimeRemaining = 60f;
+    
     public Dropdown[] dropdowns, operaterDropdown;
-    public TMP_Text Points;
+    public TMP_Text Points,TimerText;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,104 +49,25 @@ public class MathsManager : MonoBehaviour
         for (int l = 0; l < OperaterSpawner.Length; l++)
         {
             operaterValue = Random.Range(0, 2);
-            tempSigns[l]=Instantiate(PositiveNegative[operaterValue], OperaterSpawner[l].position, Quaternion.identity);
+            
             
             if(operaterValue==0)
             {
-                multiplier[l] = operaterValue +1;
+                multiplier[l] = operaterValue -1;
             }
             else
             {
-                multiplier[l] = operaterValue - 2;
+                multiplier[l] = operaterValue ;
             }
             dropdownValues[l] = dropdowns[l].value;
             operaterDropdownValue[l] = (operaterDropdown[l].value)-1;
+            tempSigns[l]=Instantiate(PositiveNegative[operaterValue], OperaterSpawner[l].position, Quaternion.identity);
         }
         for (int k = 0; k < awnser.Length; k++)
         {
             rangeReducer = 0;
             awnser[k] = index[2 * k] + multiplier[k]*index[(2 * k) + 1];
-            //while(awnser[k]==0)
-            //{
-
-            //}
-            //if (k > 0)
-            //{
-
-            //    while (awnser[k] == awnser[k - 1])
-            //    {
-
-            //        randomNumberPick = Random.Range(rangeReducer, 9);
-            //        index[2 * k] = pickNumber[randomNumberPick];
-            //        awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-            //        for (int j = randomNumberPick; j > 0 + rangeReducer; j--)
-            //        {
-            //            pickNumber[j] = pickNumber[j - 1];
-            //        }
-            //        rangeReducer++;
-            //    }
-            //    rangeReducer = 0;
-            //    Reassign();
-            //    //if (k > 1)
-            //    //{
-            //    //    while (awnser[k] == awnser[k - 2])
-            //    //    {
-            //    //        randomNumberPick = Random.Range(rangeReducer, 9);
-            //    //        index[2 * k] = pickNumber[randomNumberPick];
-            //    //        awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-            //    //        for (int j = randomNumberPick - 1; j > 0 + rangeReducer; j--)
-            //    //        {
-            //    //            pickNumber[j] = pickNumber[j - 1];
-            //    //        }
-            //    //        rangeReducer++;
-            //    //    }
-            //    //    Reassign();
-            //    //    rangeReducer = 0;
-            //    //    if (k > 2)
-            //    //    {
-            //    //        while (awnser[k] == awnser[k - 3])
-            //    //        {
-            //    //            randomNumberPick = Random.Range(rangeReducer, 9);
-            //    //            index[2 * k] = pickNumber[randomNumberPick];
-            //    //            awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-            //    //            for (int j = randomNumberPick - 1; j > 0 + rangeReducer; j--)
-            //    //            {
-            //    //                pickNumber[j] = pickNumber[j - 1];
-            //    //            }
-            //    //            rangeReducer++;
-            //    //        }
-            //    //        Reassign();
-            //    //    }
-            //    //}
-
-            //}
-            //Reassign();
-            //rangeReducer = 0;
-            //while (awnser[k] <= 0)
-            //{
-            //    randomNumberPick = Random.Range(rangeReducer, 9);
-            //    index[2 * k] = pickNumber[randomNumberPick];
-            //    awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-            //    for (int j = randomNumberPick; j > 0 + rangeReducer; j--)
-            //    {
-            //        pickNumber[j] = pickNumber[j - 1];
-            //    }
-            //    rangeReducer++;
-            //}
-            //Reassign();
-            //rangeReducer = 0;
-            //while (awnser[k] >= 10)
-            //{
-            //    randomNumberPick = Random.Range(rangeReducer, 9);
-            //    index[2 * k] = pickNumber[randomNumberPick];
-            //    awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-            //    for (int j = randomNumberPick; j > 0 + rangeReducer; j--)
-            //    {
-            //        pickNumber[j] = pickNumber[j - 1];
-            //    }
-            //    rangeReducer++;
-            //}
-            //Reassign();
+            
         }
         for (int j = 0; j < NumberSpawner.Length; j++)
         {
@@ -159,33 +81,62 @@ public class MathsManager : MonoBehaviour
     void Update()
     {
         
+        TimeRemaining -= Time.deltaTime;
+        float minutes = Mathf.FloorToInt(TimeRemaining / 60);
+        float seconds = Mathf.FloorToInt(TimeRemaining % 60);
+        TimerText.text = "Time Remaining: "+minutes+":"+seconds;
         time += Time.deltaTime;
-        Points.text = "Points: " + score;
-        score += 1 * scoreMultiplier;
-        if(time>=TimeLimit)
+       
+        Points.text = "Points: " + Mathf.Round(score);
+        
+        if (time >= TimeLimit)
         {
             ShuffleNumbers();
             //ShuffleSigns();
             time = 0;
+            TimeLimit -= 0.075f;
         }
         for (int i = 0; i < dropdowns.Length; i++)
         {
-            if (awnser[i] == dropdownValues[i])
+            if (awnser[i] == dropdownValues[i] && TimeRemaining > 0)
             {
-            Debug.Log("Yes");
-                scoreMultiplier += 1;
-        }
+                Debug.Log("Yes");
+                score+=1f/60f;
+            }
             else
-        {
-            Debug.Log("No");
-                if(scoreMultiplier>0)
-                {
-                    scoreMultiplier -= 1;
-                }
+            {
+                Debug.Log("No");
+                //if (scoreMultiplier > 0)
+                //{
+                //    scoreMultiplier -= 1;
+                //}
+            }
         }
+        //Debug.Log(operaterDropdownValue[0]);
+        Debug.Log(dropdownValues[2]);
+        Debug.Log(awnser[2]);
+        if (TimeRemaining<=0.0f)
+        {
+           
+            TimerText.gameObject.SetActive(false);
+            ResultScreen.SetActive(true);
+            Points.gameObject.SetActive(false);
+            if (score < 50)
+            {
+                OK.SetActive(true);
+            }
+            else if (score > 150)
+            {
+                Great.SetActive(true);
+            }
+            else
+            {
+                Good.SetActive(true);
+            }
+
+
         }
     }
-
     //void DropdownValueChanged(Dropdown change)
     //{
     //    CheckAwnsers();
@@ -199,14 +150,6 @@ public class MathsManager : MonoBehaviour
             dropdownValues[i] = operaterDropdownValue[i]*dropdowns[i].value;
 
             
-            //if (awnser[i] == dropdownValues[i])
-            //{
-            //    Debug.Log("Yes");
-            //}
-            //else
-            //{
-            //    Debug.Log("No");
-            //}
         }
     }
     void Reassign()
@@ -220,7 +163,7 @@ public class MathsManager : MonoBehaviour
     void ShuffleNumbers()
     {
 
-
+        
         index[increment] = Random.Range(0, 9);
 
         operaterValue = Random.Range(0, 2);
@@ -239,93 +182,17 @@ public class MathsManager : MonoBehaviour
 
         if (increment % 2 == 0)
         {
-            awnser[increment / 2] = index[increment] + multiplier[increment / 2] * index[increment + 1];
+            awnser[increment / 2] = index[increment] +  -1 *multiplier[increment / 2] * index[increment + 1];
         }
         else
         {
-            awnser[increment / 2] = index[increment - 1] + multiplier[increment / 2] * index[increment];
+            awnser[increment / 2] = index[increment - 1] + -1 * multiplier[increment / 2] * index[increment];
         }
 
-        //for (int k = awnser.Length - 1; k >= 0; k--)
-        //{
-        //    rangeReducer = 0;
-        //    while (awnser[k] <= 0)
-        //    {
-        //        randomNumberPick = Random.Range(rangeReducer, 9);
-        //        index[increment] = pickNumber[randomNumberPick];
-        //        awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-        //        for (int j = randomNumberPick; j > 0 + rangeReducer; j--)
-        //        {
-        //            pickNumber[j] = pickNumber[j - 1];
-        //        }
-        //        rangeReducer++;
-        //    }
-        //    Reassign();
-        //    rangeReducer = 0;
-        //}
-        //    while (awnser[k] >= 10)
-        //    {
-        //        randomNumberPick = Random.Range(rangeReducer, 9);
-        //        index[increment] = pickNumber[randomNumberPick];
-        //        awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-        //        for (int j = randomNumberPick; j > 0 + rangeReducer; j--)
-        //        {
-        //            pickNumber[j] = pickNumber[j - 1];
-        //        }
-        //        rangeReducer++;
-        //    }
-        //    Reassign();
-        //    if (k > 0)
-        //    {
-        //        rangeReducer = 0;
-        //        while (awnser[k] == awnser[k - 1])
-        //        {
-        //            randomNumberPick = Random.Range(rangeReducer, 9);
-        //            index[increment] = pickNumber[randomNumberPick];
-        //            awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-        //            for (int j = randomNumberPick; j > 0 + rangeReducer; j--)
-        //            {
-        //                pickNumber[j] = pickNumber[j - 1];
-        //            }
-        //            rangeReducer++;
-        //        }
-        //        Reassign();
-        //        rangeReducer = 0;
-        //        if (k > 1)
-        //        {
-        //            while (awnser[k] == awnser[k - 2])
-        //            {
-        //                randomNumberPick = Random.Range(rangeReducer, 9);
-        //                index[increment] = pickNumber[randomNumberPick];
-        //                awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-        //                for (int j = randomNumberPick; j > 0 + rangeReducer; j--)
-        //                {
-        //                    pickNumber[j] = pickNumber[j - 1];
-        //                }
-        //                rangeReducer++;
-        //            }
-        //            Reassign();
-        //            rangeReducer = 0;
-        //            if (k > 2)
-        //            {
-        //                while (awnser[k] == awnser[k - 3])
-        //                {
-        //                    randomNumberPick = Random.Range(rangeReducer, 9);
-        //                    index[increment] = pickNumber[randomNumberPick];
-        //                    awnser[k] = index[2 * k] + multiplier[k] * index[(2 * k) + 1];
-        //                    for (int j = randomNumberPick; j > 0 + rangeReducer; j--)
-        //                    {
-        //                        pickNumber[j] = pickNumber[j - 1];
-        //                    }
-        //                    rangeReducer++;
-        //                }
-        //                Reassign();
-        //            }
-        //        }
+        
+        StartCoroutine(TransitionTime(increment));
+        
 
-        //    }
-
-        //}
         Destroy(tempNumbers[increment]);
         tempNumbers[increment] = null;
         tempNumbers[increment] = Instantiate(NumberArray[index[increment]], NumberSpawner[increment].position, Quaternion.identity);
@@ -343,5 +210,12 @@ public class MathsManager : MonoBehaviour
         //Debug.Log(increment);
 
 
+    }
+
+    IEnumerator TransitionTime(int i)
+    {
+        Transitions[i].SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        Transitions[i].SetActive(false);
     }
 }
